@@ -1,0 +1,17 @@
+{
+  "name": "Arka Belajar",
+  "short_name": "ArkaBelajar",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#7dd3fc",
+  "theme_color": "#4ade80",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://cdn-icons-png.flaticon.com/512/3426/3426653.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
