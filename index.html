@@ -205,5 +205,11 @@
       if(id === 'iframeModal') { document.getElementById('contentFrame').src = ''; }
     }
   </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log('PWA Siap!'));
+    }
+  </script>
 </body>
 </html>
