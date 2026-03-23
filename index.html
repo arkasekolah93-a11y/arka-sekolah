@@ -56,12 +56,7 @@
       <h2 id="judulMapelSaatIni" class="page-title">Pilih Bab</h2>
     </div>
 
-    <div id="mainGrid" class="grid">
-      <div class="loading-box" id="loadingBox">
-        <h3 class="err-title"><i class="fas fa-spinner fa-spin"></i> MEMUAT...</h3>
-        <p class="err-desc">Menghubungkan ke server...</p>
-      </div>
-    </div>
+    <div id="mainGrid" class="grid"></div>
   </div>
 
   <div id="kontenModal" class="modal">
@@ -90,7 +85,6 @@
     let mapelAktif = '';
 
     window.onload = function() {
-      // Fetch digunakan untuk menarik data dari luar server (dari GitHub ke Google)
       fetch(API_URL)
         .then(response => response.json())
         .then(response => {
@@ -204,8 +198,8 @@
       document.getElementById(id).style.display = 'none';
       if(id === 'iframeModal') { document.getElementById('contentFrame').src = ''; }
     }
-  </script>
-  <script>
+
+    // Pemanggil Mesin PWA
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker.register('./sw.js')
         .then(() => console.log('PWA Siap!'));
