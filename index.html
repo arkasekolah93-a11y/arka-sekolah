@@ -51,7 +51,7 @@
     .sub-judul { font-weight: 700; }
     @media (min-width: 768px) { .header h1 { font-size: 1.5rem; } .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; } .card i { font-size: 4rem; } .modal-content { padding: 2.5rem 1.5rem 1.5rem 1.5rem; } }
 
-    /* ===== PDF EDITOR STYLES (dengan namespace ID) ===== */
+    /* ===== PDF EDITOR STYLES ===== */
     #app-pdf-editor {
       background-color: #e9ecef; 
       min-height: 100vh; 
@@ -276,33 +276,21 @@
       const sigCanvas = document.getElementById('pdf-signature-canvas');
       const sigCtx = sigCanvas.getContext('2d');
 
-      // === FUNGSI UTAMA ===
-      
-      // Fetch PDF blob dari URL (dengan proxy base64 yang dibersihkan)
+      // === PERBAIKAN: fetchPdfBlob dengan Direct Download Google Drive ===
       async function fetchPdfBlob(url) {
+        // Jika URL Google Drive, gunakan direct download (file harus public)
         if (url.includes('drive.google.com')) {
           const match = url.match(/[-\w]{25,}/);
           if (match) {
-            const id = match[0];
-            console.log('Mengambil PDF dari Google Drive ID:', id);
-            const response = await fetch(`${GOOGLE_APP_URL}?p=getpdf&id=${id}`);
-            const base64Raw = await response.text();
-            // Bersihkan base64 dari whitespace dan karakter non-base64
-            const base64Clean = base64Raw.replace(/[^A-Za-z0-9+/=]/g, '');
-            if (base64Clean.length === 0) {
-              throw new Error('Data PDF kosong atau tidak valid');
-            }
-            console.log('Panjang base64:', base64Clean.length);
-            // Decode base64 menjadi binary string
-            const binaryStr = atob(base64Clean);
-            const bytes = new Uint8Array(binaryStr.length);
-            for (let i = 0; i < binaryStr.length; i++) {
-              bytes[i] = binaryStr.charCodeAt(i);
-            }
-            return new Blob([bytes], { type: 'application/pdf' });
+            const fileId = match[0];
+            const directUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+            console.log('Mengambil PDF dari:', directUrl);
+            const response = await fetch(directUrl);
+            if (!response.ok) throw new Error('Gagal mengunduh PDF. Pastikan file sudah dibagikan publik.');
+            return response.blob();
           }
         }
-        // Jika bukan Google Drive, fetch langsung
+        // Selain Google Drive, fetch langsung
         return fetch(url).then(r => r.blob());
       }
 
