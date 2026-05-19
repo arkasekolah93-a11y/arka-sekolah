@@ -1,4 +1,4 @@
-const CACHE_NAME = 'arka-belajar-v4';
+const CACHE_NAME = 'arka-belajar-v5';
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
