@@ -179,28 +179,28 @@
         btn.onclick = function() {
           let url = item.url;
           
-          // CEK JIKA FILE DARI GOOGLE DRIVE (KITA ANGGAP INI BUKU PDF)
-          if(url.indexOf('drive.google.com') !== -1) {
-            // Kita ambil ID rahasia filenya saja
-            const match = url.match(/[-\w]{25,}/);
-            if(match) {
-              const fileId = match[0];
-              // Ubah URL menjadi link rahasia untuk mengunduh file
-              const directDownloadUrl = 'https://drive.google.com/uc?export=download&id=' + fileId;
-              
-              // ==========================================
-              // GANTI URL DI BAWAH INI DENGAN URL GITHUB "OM TORO PDF EDITOR" ANDA
-              const urlPdfEditorSaya = 'https://rbcduabelas.github.io/omtoro-pdf/';
-              // ==========================================
-              
-              // Tembakkan ke Om Toro PDF dengan membawa kargo link PDF-nya!
-              window.open(urlPdfEditorSaya + '?buka=' + encodeURIComponent(directDownloadUrl), '_blank');
-              return; // Hentikan eksekusi, biarkan tab baru terbuka
+          // JIKA YANG DIKLIK ADALAH JENIS BUKU / FORMAT PDF
+          if(item.jenis.toLowerCase().indexOf('buku') !== -1 || url.indexOf('.pdf') !== -1) {
+            
+            // ==========================================
+            // TULIS URL GITHUB PAGES "OM TORO PDF EDITOR" ANDA DI SINI
+            const urlPdfEditorSaya = 'https://[username-github-anda].github.io/omtoro-pdf/';
+            // ==========================================
+            
+            // Gabungkan URL PDF Editor dengan kargo file PDF-nya dari GitHub Arka
+            const urlLengkap = urlPdfEditorSaya + '?buka=' + encodeURIComponent(url);
+            
+            // JURUS BIAR TETAP DI DALAM PWA ARKA: Buka di dalam iframeModal bawaan Arka!
+            bukaIframe(urlLengkap);
+            
+          } else {
+            // Jika jenisnya video atau quiz, buka lewat alur biasa
+            if(url.indexOf('drive.google.com') !== -1) {
+              const match = url.match(/[-\w]{25,}/);
+              if(match) url = 'https://drive.google.com/file/d/' + match[0] + '/preview';
             }
+            bukaIframe(url);
           }
-          
-          // Jika bukan dari Google Drive (misal video YouTube/Game), buka di iFrame biasa
-          bukaIframe(url);
         };
         list.appendChild(btn);
       }
