@@ -259,24 +259,6 @@
     const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbw-x7qjibHqAuD_U-hfUyBbKRdTbzPhYdISgjlDDmGvGEqUd26W0oiqsPYJWmlhUg/exec";
     const API_URL = GOOGLE_APP_URL + "?p=api";
 
-    /* 
-      ============ PENTING: TAMBAHKAN DI GOOGLE APPS SCRIPT ANDA ============
-      Agar editor bisa mengunduh PDF dari Google Drive, tambahkan endpoint berikut 
-      di doGet() Apps Script Anda:
-
-      if (e.parameter.p === 'getpdf') {
-        var id = e.parameter.id;
-        var file = DriveApp.getFileById(id);
-        if (file.getMimeType() === 'application/pdf') {
-          return ContentService.createTextOutput(file.getBlob().getBytes())
-            .setMimeType(ContentService.MimeType.PDF);
-        } else {
-          return ContentService.createTextOutput('Bukan PDF');
-        }
-      }
-      ========================================================================
-    */
-
     // ========================================================
     // OBJEK PDF EDITOR (namespace global)
     // ========================================================
@@ -307,17 +289,25 @@
 
       // === FUNGSI UTAMA ===
       
-      // Fetch PDF blob dari URL (dengan proxy jika perlu)
+      // Fetch PDF blob dari URL (dengan proxy base64)
       async function fetchPdfBlob(url) {
-        // Jika Google Drive, gunakan proxy via Apps Script
+        // Jika Google Drive, gunakan proxy base64
         if (url.includes('drive.google.com')) {
           const match = url.match(/[-\w]{25,}/);
           if (match) {
             const id = match[0];
-            return fetch(`${GOOGLE_APP_URL}?p=getpdf&id=${id}`).then(r => r.blob());
+            const response = await fetch(`${GOOGLE_APP_URL}?p=getpdf&id=${id}`);
+            const base64 = await response.text();
+            // Decode base64 ke binary
+            const binaryStr = atob(base64);
+            const bytes = new Uint8Array(binaryStr.length);
+            for (let i = 0; i < binaryStr.length; i++) {
+              bytes[i] = binaryStr.charCodeAt(i);
+            }
+            return new Blob([bytes], { type: 'application/pdf' });
           }
         }
-        // Jika bukan, coba fetch langsung (harus mendukung CORS)
+        // Jika bukan Google Drive, fetch langsung (harus mendukung CORS)
         return fetch(url).then(r => r.blob());
       }
 
