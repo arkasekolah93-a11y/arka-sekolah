@@ -11,49 +11,51 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
+    /* Style tetap sama dengan tambahan sedikit untuk estetika navigasi */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Fredoka', sans-serif; background-color: #7dd3fc; background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)), linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)); background-size: 60px 60px; color: #1e293b; min-height: 100vh; overflow-x: hidden; }
     .header { background: #4ade80; padding: 1rem; display: flex; justify-content: center; align-items: center; border-bottom: 8px solid #713f12; border-top: 4px solid #bbf7d0; position: sticky; top: 0; z-index: 10; }
     .header h1 { font-family: 'Press Start 2P', cursive; font-size: 1.2rem; color: white; cursor: pointer; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; letter-spacing: 1px; text-align: center; }
     .container { padding: 1.5rem; width: 100%; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
-    .nav-top { display: none; margin-bottom: 1.5rem; align-items: center; gap: 1rem; }
+    .nav-top { display: none; margin-bottom: 1.5rem; align-items: center; gap: 1rem; flex-wrap: wrap; }
     .btn-back { background: #fde047; border: 3px solid #000; padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 0.6rem; box-shadow: 3px 3px 0 #000; transition: all 0.1s; }
     .btn-back:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #000; }
-    .page-title { font-family: 'Press Start 2P', cursive; font-size: 1rem; color: #fff; text-shadow: 2px 2px 0 #000; }
+    .page-title { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; color: #fff; text-shadow: 2px 2px 0 #000; line-height: 1.4; }
     .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.5rem; }
     .card { background: #fff; border-radius: 15px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; border: 4px solid #000; box-shadow: 5px 5px 0 rgba(0,0,0,0.8); transition: all 0.1s; }
     .card:active { transform: translate(5px, 5px); box-shadow: 0 0 0 rgba(0,0,0,0.8); }
     .card i { font-size: 3rem; color: #fff; margin-bottom: 1rem; text-shadow: 3px 3px 0 #000; }
     .card h2 { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; line-height: 1.5; color: #000; }
-    .card:nth-child(1n) { background: #fca5a5; } .card:nth-child(2n) { background: #fde047; } .card:nth-child(3n) { background: #86efac; } .card:nth-child(4n) { background: #93c5fd; } 
+    
+    /* Variasi Warna Card */
+    .card:nth-child(4n+1) { background: #fca5a5; } 
+    .card:nth-child(4n+2) { background: #fde047; } 
+    .card:nth-child(4n+3) { background: #86efac; } 
+    .card:nth-child(4n+4) { background: #93c5fd; } 
+
+    /* Modal & Iframe Style Tetap */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
     .modal-content { background: #e2e8f0; padding: 2.5rem 1rem 1rem 1rem; border: 5px solid #000; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 8px 8px 0 #000; }
     .close-btn { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: 3px solid #000; width: 35px; height: 35px; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 3px 3px 0 #000; z-index: 10; }
-    .close-btn:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #000; }
     .sub-menu-btn { display: flex; align-items: center; padding: 1rem; background: #3b82f6; border: 4px solid #000; border-radius: 12px; margin-bottom: 1rem; cursor: pointer; color: white; font-weight: 600; box-shadow: 4px 4px 0 #000; transition: all 0.1s; text-align: left; }
-    .sub-menu-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #000; background: #2563eb; }
     .sub-menu-btn i { font-size: 1.5rem; margin-right: 1rem; color: #fde047; text-shadow: 2px 2px 0 #000; }
-    .sub-menu-btn div { font-size: 1rem; line-height: 1.2; }
-    #iframeModal { padding: 0; } #iframeModal .modal-content { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; padding: 0; border: none; background: #000; box-shadow: none; border-radius: 0; } #iframeModal .close-btn { top: 10px; right: 10px; border-radius: 8px; } iframe { width: 100%; height: 100%; border: none; display: block; }
-    .loading-box { text-align: center; width: 100%; padding: 3rem; background: #fff; border: 4px solid #000; box-shadow: 6px 6px 0 #000; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-    .err-title { color: #000; font-family: 'Press Start 2P', cursive; font-size: 1rem; margin-bottom: 10px; }
-    .err-desc { font-family: 'Fredoka', sans-serif; margin-top: 10px; color: #64748b; }
-    .mod-title { margin-top: 10px; margin-bottom: 1.5rem; color: #000; font-family: 'Press Start 2P', cursive; text-align: center; font-size: 0.9rem; line-height: 1.5; }
-    .sub-jenis { opacity: 0.9; font-size: 0.85rem; font-weight: 500; }
-    .sub-judul { font-weight: 700; }
-    @media (min-width: 768px) { .header h1 { font-size: 1.5rem; } .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 2rem; } .card i { font-size: 4rem; } .modal-content { padding: 2.5rem 1.5rem 1.5rem 1.5rem; } }
+    #iframeModal .modal-content { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; padding: 0; border: none; background: #000; }
+    iframe { width: 100%; height: 100%; border: none; }
+    .loading-box { text-align: center; width: 100%; padding: 3rem; background: #fff; border: 4px solid #000; box-shadow: 6px 6px 0 #000; }
+    .mod-title { margin-top: 10px; margin-bottom: 1.5rem; color: #000; font-family: 'Press Start 2P', cursive; text-align: center; font-size: 0.9rem; }
+    @media (min-width: 768px) { .header h1 { font-size: 1.5rem; } .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } }
   </style>
 </head>
 <body>
 
   <div class="header">
-    <h1 onclick="tampilMapel()">ARKA BELAJAR</h1>
+    <h1 onclick="tampilKelas()">ARKA BELAJAR</h1>
   </div>
 
   <div class="container">
     <div id="navBab" class="nav-top">
-      <button class="btn-back" onclick="tampilMapel()"><i class="fas fa-caret-left"></i> KEMBALI</button>
-      <h2 id="judulMapelSaatIni" class="page-title">Pilih Bab</h2>
+      <button id="btnKembali" class="btn-back"><i class="fas fa-caret-left"></i> KEMBALI</button>
+      <h2 id="breadcrumb" class="page-title">Pilih Kelas</h2>
     </div>
 
     <div id="mainGrid" class="grid"></div>
@@ -75,14 +77,12 @@
   </div>
 
   <script>
-    // ========================================================
-    // PASTE LINK /exec GOOGLE APPS SCRIPT ANDA DI BAWAH INI:
-    // ========================================================
     const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbw-x7qjibHqAuD_U-hfUyBbKRdTbzPhYdISgjlDDmGvGEqUd26W0oiqsPYJWmlhUg/exec";
     const API_URL = GOOGLE_APP_URL + "?p=api";
 
     let allData = [];
-    let mapelAktif = '';
+    let filterKelas = '';
+    let filterMapel = '';
 
     window.onload = function() {
       fetch(API_URL)
@@ -94,108 +94,125 @@
           }
           allData = response.data || [];
           if(allData.length === 0) {
-            tampilkanError('KOSONG!', 'Silakan isi dari halaman Admin Anda.');
+            tampilkanError('KOSONG!', 'Silakan isi data di Google Sheets.');
           } else {
-            tampilMapel(); 
+            tampilKelas(); 
           }
         })
         .catch(err => {
-          tampilkanError('KONEKSI GAGAL!', 'Tidak bisa terhubung ke database. Pastikan link Google Script benar.');
+          tampilkanError('KONEKSI GAGAL!', 'Periksa koneksi internet atau link Google Script.');
           console.error(err);
         });
     };
 
     function tampilkanError(judul, deskripsi) {
-      document.getElementById('mainGrid').innerHTML = '<div class="loading-box"><h3 class="err-title" style="color:#ef4444;">' + judul + '</h3><p class="err-desc">' + deskripsi + '</p></div>';
+      document.getElementById('mainGrid').innerHTML = '<div class="loading-box"><h3 style="color:#ef4444; font-family:\'Press Start 2P\'">' + judul + '</h3><p>' + deskripsi + '</p></div>';
     }
 
-    function tampilMapel() {
+    // --- LEVEL 1: PILIH KELAS ---
+    function tampilKelas() {
+      filterKelas = '';
       document.getElementById('navBab').style.display = 'none';
       const grid = document.getElementById('mainGrid');
       grid.innerHTML = '';
       
-      const mapels = [];
-      for(let i=0; i<allData.length; i++) {
-        if(mapels.indexOf(allData[i].mapel) === -1) { mapels.push(allData[i].mapel); }
-      }
-      
-      const iconList = ['fa-gamepad', 'fa-book-open', 'fa-star', 'fa-rocket', 'fa-trophy', 'fa-cube'];
-      
-      for(let j=0; j<mapels.length; j++) {
-        const mapel = mapels[j];
+      // Mengambil daftar kelas unik dari data
+      const daftarKelas = [];
+      allData.forEach(item => {
+        let k = item.kelas || "1"; // Default ke kelas 1 jika kosong
+        if(daftarKelas.indexOf(k.toString()) === -1) daftarKelas.push(k.toString());
+      });
+      daftarKelas.sort();
+
+      daftarKelas.forEach(kelas => {
         const div = document.createElement('div');
         div.className = 'card';
-        let randomIcon = iconList[j % iconList.length];
+        div.innerHTML = '<i class="fas fa-graduation-cap"></i><h2>KELAS ' + kelas + '</h2>';
+        div.onclick = function() { tampilMapel(kelas); };
+        grid.appendChild(div);
+      });
+    }
+
+    // --- LEVEL 2: PILIH MAPEL ---
+    function tampilMapel(kelas) {
+      filterKelas = kelas;
+      document.getElementById('navBab').style.display = 'flex';
+      document.getElementById('breadcrumb').innerText = "KELAS " + kelas;
+      document.getElementById('btnKembali').onclick = tampilKelas;
+
+      const grid = document.getElementById('mainGrid');
+      grid.innerHTML = '';
+      
+      const mapels = [];
+      allData.forEach(item => {
+        if(item.kelas.toString() === kelas && mapels.indexOf(item.mapel) === -1) {
+          mapels.push(item.mapel);
+        }
+      });
+      
+      const iconList = ['fa-gamepad', 'fa-book-open', 'fa-star', 'fa-rocket', 'fa-trophy', 'fa-cube'];
+      mapels.forEach((mapel, index) => {
+        const div = document.createElement('div');
+        div.className = 'card';
+        let randomIcon = iconList[index % iconList.length];
         div.innerHTML = '<i class="fas ' + randomIcon + '"></i><h2>' + mapel + '</h2>';
         div.onclick = function() { tampilBab(mapel); }; 
         grid.appendChild(div);
-      }
+      });
     }
 
+    // --- LEVEL 3: PILIH BAB ---
     function tampilBab(mapel) {
-      mapelAktif = mapel;
-      document.getElementById('navBab').style.display = 'flex';
-      document.getElementById('judulMapelSaatIni').innerText = mapel.toUpperCase();
+      filterMapel = mapel;
+      document.getElementById('breadcrumb').innerText = "KELAS " + filterKelas + " > " + mapel.toUpperCase();
+      document.getElementById('btnKembali').onclick = function() { tampilMapel(filterKelas); };
       
       const grid = document.getElementById('mainGrid');
       grid.innerHTML = '';
       
       const babs = [];
-      for(let i=0; i<allData.length; i++) {
-        if(allData[i].mapel === mapel && babs.indexOf(allData[i].bab) === -1) { babs.push(allData[i].bab); }
-      }
+      allData.forEach(item => {
+        if(item.kelas.toString() === filterKelas && item.mapel === mapel && babs.indexOf(item.bab) === -1) {
+          babs.push(item.bab);
+        }
+      });
       
-      for(let j=0; j<babs.length; j++) {
-        const bab = babs[j];
+      babs.forEach(bab => {
         const div = document.createElement('div');
         div.className = 'card';
         div.innerHTML = '<i class="fas fa-door-open"></i><h2>' + bab + '</h2>';
-        div.onclick = function() { tampilKonten(mapel, bab); }; 
+        div.onclick = function() { tampilKonten(bab); }; 
         grid.appendChild(div);
-      }
+      });
     }
 
-    function tampilKonten(mapel, bab) {
+    // --- LEVEL 4: PILIH MATERI (MODAL) ---
+    function tampilKonten(bab) {
       document.getElementById('judulBabSaatIni').innerText = bab.toUpperCase();
       const list = document.getElementById('kontenList');
       list.innerHTML = '';
       
-      const konten = [];
-      for(let i=0; i<allData.length; i++) {
-        if(allData[i].mapel === mapel && allData[i].bab === bab) { konten.push(allData[i]); }
-      }
+      const konten = allData.filter(item => 
+        item.kelas.toString() === filterKelas && 
+        item.mapel === filterMapel && 
+        item.bab === bab
+      );
       
-      for(let j=0; j<konten.length; j++) {
-        const item = konten[j];
+      konten.forEach(item => {
         const btn = document.createElement('div');
         btn.className = 'sub-menu-btn';
+        let ikon = item.jenis.toLowerCase().includes('buku') ? 'fa-book-reader' : 
+                   item.jenis.toLowerCase().includes('quiz') ? 'fa-gamepad' : 'fa-play';
         
-        let ikon = 'fa-play';
-        if(item.jenis.toLowerCase().indexOf('buku') !== -1) ikon = 'fa-book-reader';
-        if(item.jenis.toLowerCase().indexOf('quiz') !== -1) ikon = 'fa-gamepad';
-        
-        btn.innerHTML = '<i class="fas ' + ikon + '"></i> <div><span class="sub-jenis">' + item.jenis + '</span><br><span class="sub-judul">' + item.judul + '</span></div>';
+        btn.innerHTML = '<i class="fas ' + ikon + '"></i> <div><small>' + item.jenis + '</small><br><b>' + item.judul + '</b></div>';
         
         btn.onclick = function() {
           let url = item.url;
-          
-          // JIKA YANG DIKLIK ADALAH JENIS BUKU / FORMAT PDF
-          if(item.jenis.toLowerCase().indexOf('buku') !== -1 || url.indexOf('.pdf') !== -1) {
-            
-            // ==========================================
-            // TULIS URL GITHUB PAGES "OM TORO PDF EDITOR" ANDA DI SINI
+          if(item.jenis.toLowerCase().includes('buku') || url.includes('.pdf')) {
             const urlPdfEditorSaya = 'https://rbcduabelas.github.io/omtoro-pdf/';
-            // ==========================================
-            
-            // Gabungkan URL PDF Editor dengan kargo file PDF-nya dari GitHub Arka
-            const urlLengkap = urlPdfEditorSaya + '?buka=' + encodeURIComponent(url);
-            
-            // JURUS BIAR TETAP DI DALAM PWA ARKA: Buka di dalam iframeModal bawaan Arka!
-            bukaIframe(urlLengkap);
-            
+            bukaIframe(urlPdfEditorSaya + '?buka=' + encodeURIComponent(url));
           } else {
-            // Jika jenisnya video atau quiz, buka lewat alur biasa
-            if(url.indexOf('drive.google.com') !== -1) {
+            if(url.includes('drive.google.com')) {
               const match = url.match(/[-\w]{25,}/);
               if(match) url = 'https://drive.google.com/file/d/' + match[0] + '/preview';
             }
@@ -203,7 +220,7 @@
           }
         };
         list.appendChild(btn);
-      }
+      });
       document.getElementById('kontenModal').style.display = 'flex';
     }
 
@@ -217,10 +234,8 @@
       if(id === 'iframeModal') { document.getElementById('contentFrame').src = ''; }
     }
 
-    // Pemanggil Mesin PWA
     if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.register('./sw.js')
-        .then(() => console.log('PWA Siap!'));
+      navigator.serviceWorker.register('./sw.js').then(() => console.log('PWA Siap!'));
     }
   </script>
 </body>
