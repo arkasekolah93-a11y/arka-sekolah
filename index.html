@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
   <title>Arka Belajar</title>
   
   <meta name="theme-color" content="#4ade80">
@@ -11,7 +11,6 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
   <style>
-    /* Style tetap sama dengan tambahan sedikit untuk estetika navigasi */
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { font-family: 'Fredoka', sans-serif; background-color: #7dd3fc; background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)), linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)); background-size: 60px 60px; color: #1e293b; min-height: 100vh; overflow-x: hidden; }
     .header { background: #4ade80; padding: 1rem; display: flex; justify-content: center; align-items: center; border-bottom: 8px solid #713f12; border-top: 4px solid #bbf7d0; position: sticky; top: 0; z-index: 10; }
@@ -27,13 +26,11 @@
     .card i { font-size: 3rem; color: #fff; margin-bottom: 1rem; text-shadow: 3px 3px 0 #000; }
     .card h2 { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; line-height: 1.5; color: #000; }
     
-    /* Variasi Warna Card */
     .card:nth-child(4n+1) { background: #fca5a5; } 
     .card:nth-child(4n+2) { background: #fde047; } 
     .card:nth-child(4n+3) { background: #86efac; } 
     .card:nth-child(4n+4) { background: #93c5fd; } 
 
-    /* Modal & Iframe Style Tetap */
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
     .modal-content { background: #e2e8f0; padding: 2.5rem 1rem 1rem 1rem; border: 5px solid #000; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 8px 8px 0 #000; }
     .close-btn { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: 3px solid #000; width: 35px; height: 35px; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 3px 3px 0 #000; z-index: 10; }
@@ -77,6 +74,9 @@
   </div>
 
   <script>
+    // ========================================================
+    // PASTE LINK /exec GOOGLE APPS SCRIPT ANDA DI BAWAH INI:
+    // ========================================================
     const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbw-x7qjibHqAuD_U-hfUyBbKRdTbzPhYdISgjlDDmGvGEqUd26W0oiqsPYJWmlhUg/exec";
     const API_URL = GOOGLE_APP_URL + "?p=api";
 
@@ -116,10 +116,9 @@
       const grid = document.getElementById('mainGrid');
       grid.innerHTML = '';
       
-      // Mengambil daftar kelas unik dari data
       const daftarKelas = [];
       allData.forEach(item => {
-        let k = item.kelas || "1"; // Default ke kelas 1 jika kosong
+        let k = item.kelas || "1"; 
         if(daftarKelas.indexOf(k.toString()) === -1) daftarKelas.push(k.toString());
       });
       daftarKelas.sort();
@@ -186,7 +185,7 @@
       });
     }
 
-    // --- LEVEL 4: PILIH MATERI (MODAL) ---
+    // --- LEVEL 4: PILIH MATERI ---
     function tampilKonten(bab) {
       document.getElementById('judulBabSaatIni').innerText = bab.toUpperCase();
       const list = document.getElementById('kontenList');
@@ -209,6 +208,7 @@
         btn.onclick = function() {
           let url = item.url;
           if(item.jenis.toLowerCase().includes('buku') || url.includes('.pdf')) {
+            // INTEGRASI KE OM TORO PDF EDITOR
             const urlPdfEditorSaya = 'https://rbcduabelas.github.io/omtoro-pdf/';
             bukaIframe(urlPdfEditorSaya + '?buka=' + encodeURIComponent(url));
           } else {
