@@ -25,17 +25,21 @@
     .card:active { transform: translate(5px, 5px); box-shadow: 0 0 0 rgba(0,0,0,0.8); }
     .card i { font-size: 3rem; color: #fff; margin-bottom: 1rem; text-shadow: 3px 3px 0 #000; }
     .card h2 { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; line-height: 1.5; color: #000; }
-    
-    .card:nth-child(4n+1) { background: #fca5a5; } 
-    .card:nth-child(4n+2) { background: #fde047; } 
-    .card:nth-child(4n+3) { background: #86efac; } 
-    .card:nth-child(4n+4) { background: #93c5fd; } 
-
+    .card:nth-child(4n+1) { background: #fca5a5; } .card:nth-child(4n+2) { background: #fde047; } .card:nth-child(4n+3) { background: #86efac; } .card:nth-child(4n+4) { background: #93c5fd; } 
     .modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
     .modal-content { background: #e2e8f0; padding: 2.5rem 1rem 1rem 1rem; border: 5px solid #000; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 8px 8px 0 #000; }
     .close-btn { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: 3px solid #000; width: 35px; height: 35px; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 3px 3px 0 #000; z-index: 10; }
-    .sub-menu-btn { display: flex; align-items: center; padding: 1rem; background: #3b82f6; border: 4px solid #000; border-radius: 12px; margin-bottom: 1rem; cursor: pointer; color: white; font-weight: 600; box-shadow: 4px 4px 0 #000; transition: all 0.1s; text-align: left; }
+    
+    /* MODIFIKASI: Layout Tombol Menu & Tombol Download */
+    .sub-menu-container { display: flex; gap: 10px; margin-bottom: 1rem; align-items: stretch; }
+    .sub-menu-btn { flex: 1; display: flex; align-items: center; padding: 1rem; background: #3b82f6; border: 4px solid #000; border-radius: 12px; cursor: pointer; color: white; font-weight: 600; box-shadow: 4px 4px 0 #000; transition: all 0.1s; text-align: left; }
+    .sub-menu-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #000; background: #2563eb; }
     .sub-menu-btn i { font-size: 1.5rem; margin-right: 1rem; color: #fde047; text-shadow: 2px 2px 0 #000; }
+    .btn-download-offline { width: 75px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fde047; border: 4px solid #000; border-radius: 12px; cursor: pointer; font-weight: 600; color: #000; font-size: 0.65rem; box-shadow: 4px 4px 0 #000; transition: all 0.1s; text-align: center; padding: 5px; }
+    .btn-download-offline:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #000; }
+    .btn-download-offline i { font-size: 1.4rem; margin-bottom: 4px; }
+    .btn-download-offline.downloaded { background: #86efac; color: #064e3b; }
+
     #iframeModal .modal-content { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; padding: 0; border: none; background: #000; }
     iframe { width: 100%; height: 100%; border: none; }
     .loading-box { text-align: center; width: 100%; padding: 3rem; background: #fff; border: 4px solid #000; box-shadow: 6px 6px 0 #000; }
@@ -74,9 +78,6 @@
   </div>
 
   <script>
-    // ========================================================
-    // PASTE LINK /exec GOOGLE APPS SCRIPT ANDA DI BAWAH INI:
-    // ========================================================
     const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbw-x7qjibHqAuD_U-hfUyBbKRdTbzPhYdISgjlDDmGvGEqUd26W0oiqsPYJWmlhUg/exec";
     const API_URL = GOOGLE_APP_URL + "?p=api";
 
@@ -109,108 +110,157 @@
       document.getElementById('mainGrid').innerHTML = '<div class="loading-box"><h3 style="color:#ef4444; font-family:\'Press Start 2P\'">' + judul + '</h3><p>' + deskripsi + '</p></div>';
     }
 
-    // --- LEVEL 1: PILIH KELAS ---
+    // --- MESIN PENYIMPANAN OFFLINE (INDEXED DB) ---
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("ArkaPdfDB", 1);
+        request.onupgradeneeded = (e) => { e.target.result.createObjectStore("pdfs"); };
+        request.onsuccess = (e) => resolve(e.target.result);
+        request.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function getOfflinePdf(url) {
+      try {
+        const db = await openDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction("pdfs", 'readonly');
+          const request = tx.objectStore("pdfs").get(url);
+          request.onsuccess = () => resolve(request.result); 
+          request.onerror = () => resolve(null);
+        });
+      } catch(e) { return null; }
+    }
+
+    async function saveOfflinePdf(url, base64Data) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("pdfs", 'readwrite');
+        tx.objectStore("pdfs").put(base64Data, url);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject();
+      });
+    }
+
+    async function deleteOfflinePdf(url) {
+      const db = await openDB();
+      return new Promise((resolve) => {
+        const tx = db.transaction("pdfs", 'readwrite');
+        tx.objectStore("pdfs").delete(url);
+        tx.oncomplete = () => resolve();
+      });
+    }
+
+    async function downloadPdfToOffline(url, btnElement) {
+      btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i><br>Proses...';
+      try {
+        let base64Data = "";
+        if(url.includes('drive.google.com')) {
+          // Manfaatkan proxy di code.gs untuk tembus limitasi Google Drive
+          const match = url.match(/[-\w]{25,}/);
+          if(!match) throw new Error("Link Drive tidak valid");
+          const proxyUrl = GOOGLE_APP_URL + "?p=getpdf&id=" + match[0];
+          const response = await fetch(proxyUrl);
+          base64Data = await response.text();
+          if(base64Data.startsWith('Error')) throw new Error(base64Data);
+        } else {
+          const response = await fetch(url);
+          const blob = await response.blob();
+          base64Data = await new Promise((resolve, reject) => {
+             const reader = new FileReader();
+             reader.onloadend = () => resolve(reader.result.split(',')[1]);
+             reader.onerror = reject;
+             reader.readAsDataURL(blob);
+          });
+        }
+        await saveOfflinePdf(url, base64Data);
+        btnElement.classList.add('downloaded');
+        btnElement.innerHTML = '<i class="fas fa-check-circle"></i><br>Tersimpan';
+      } catch(e) {
+        alert('Gagal mendownload: ' + e.message);
+        btnElement.innerHTML = '<i class="fas fa-cloud-download-alt"></i><br>Simpan';
+      }
+    }
+    // --- AKHIR MESIN OFFLINE ---
+
     function tampilKelas() {
-      filterKelas = '';
-      document.getElementById('navBab').style.display = 'none';
-      const grid = document.getElementById('mainGrid');
-      grid.innerHTML = '';
+      filterKelas = ''; document.getElementById('navBab').style.display = 'none';
+      const grid = document.getElementById('mainGrid'); grid.innerHTML = '';
       
       const daftarKelas = [];
-      allData.forEach(item => {
-        let k = item.kelas || "1"; 
-        if(daftarKelas.indexOf(k.toString()) === -1) daftarKelas.push(k.toString());
-      });
+      allData.forEach(item => { let k = item.kelas || "1"; if(daftarKelas.indexOf(k.toString()) === -1) daftarKelas.push(k.toString()); });
       daftarKelas.sort();
 
       daftarKelas.forEach(kelas => {
-        const div = document.createElement('div');
-        div.className = 'card';
+        const div = document.createElement('div'); div.className = 'card';
         div.innerHTML = '<i class="fas fa-graduation-cap"></i><h2>KELAS ' + kelas + '</h2>';
-        div.onclick = function() { tampilMapel(kelas); };
-        grid.appendChild(div);
+        div.onclick = function() { tampilMapel(kelas); }; grid.appendChild(div);
       });
     }
 
-    // --- LEVEL 2: PILIH MAPEL ---
     function tampilMapel(kelas) {
-      filterKelas = kelas;
-      document.getElementById('navBab').style.display = 'flex';
+      filterKelas = kelas; document.getElementById('navBab').style.display = 'flex';
       document.getElementById('breadcrumb').innerText = "KELAS " + kelas;
       document.getElementById('btnKembali').onclick = tampilKelas;
-
-      const grid = document.getElementById('mainGrid');
-      grid.innerHTML = '';
+      const grid = document.getElementById('mainGrid'); grid.innerHTML = '';
       
       const mapels = [];
-      allData.forEach(item => {
-        if(item.kelas.toString() === kelas && mapels.indexOf(item.mapel) === -1) {
-          mapels.push(item.mapel);
-        }
-      });
+      allData.forEach(item => { if(item.kelas.toString() === kelas && mapels.indexOf(item.mapel) === -1) mapels.push(item.mapel); });
       
       const iconList = ['fa-gamepad', 'fa-book-open', 'fa-star', 'fa-rocket', 'fa-trophy', 'fa-cube'];
       mapels.forEach((mapel, index) => {
-        const div = document.createElement('div');
-        div.className = 'card';
-        let randomIcon = iconList[index % iconList.length];
-        div.innerHTML = '<i class="fas ' + randomIcon + '"></i><h2>' + mapel + '</h2>';
-        div.onclick = function() { tampilBab(mapel); }; 
-        grid.appendChild(div);
+        const div = document.createElement('div'); div.className = 'card';
+        div.innerHTML = '<i class="fas ' + iconList[index % iconList.length] + '"></i><h2>' + mapel + '</h2>';
+        div.onclick = function() { tampilBab(mapel); }; grid.appendChild(div);
       });
     }
 
-    // --- LEVEL 3: PILIH BAB ---
     function tampilBab(mapel) {
-      filterMapel = mapel;
-      document.getElementById('breadcrumb').innerText = "KELAS " + filterKelas + " > " + mapel.toUpperCase();
+      filterMapel = mapel; document.getElementById('breadcrumb').innerText = "KELAS " + filterKelas + " > " + mapel.toUpperCase();
       document.getElementById('btnKembali').onclick = function() { tampilMapel(filterKelas); };
-      
-      const grid = document.getElementById('mainGrid');
-      grid.innerHTML = '';
+      const grid = document.getElementById('mainGrid'); grid.innerHTML = '';
       
       const babs = [];
-      allData.forEach(item => {
-        if(item.kelas.toString() === filterKelas && item.mapel === mapel && babs.indexOf(item.bab) === -1) {
-          babs.push(item.bab);
-        }
-      });
+      allData.forEach(item => { if(item.kelas.toString() === filterKelas && item.mapel === mapel && babs.indexOf(item.bab) === -1) babs.push(item.bab); });
       
       babs.forEach(bab => {
-        const div = document.createElement('div');
-        div.className = 'card';
+        const div = document.createElement('div'); div.className = 'card';
         div.innerHTML = '<i class="fas fa-door-open"></i><h2>' + bab + '</h2>';
-        div.onclick = function() { tampilKonten(bab); }; 
-        grid.appendChild(div);
+        div.onclick = function() { tampilKonten(bab); }; grid.appendChild(div);
       });
     }
 
-    // --- LEVEL 4: PILIH MATERI ---
     function tampilKonten(bab) {
       document.getElementById('judulBabSaatIni').innerText = bab.toUpperCase();
-      const list = document.getElementById('kontenList');
-      list.innerHTML = '';
+      const list = document.getElementById('kontenList'); list.innerHTML = '';
       
-      const konten = allData.filter(item => 
-        item.kelas.toString() === filterKelas && 
-        item.mapel === filterMapel && 
-        item.bab === bab
-      );
+      const konten = allData.filter(item => item.kelas.toString() === filterKelas && item.mapel === filterMapel && item.bab === bab );
       
       konten.forEach(item => {
-        const btn = document.createElement('div');
-        btn.className = 'sub-menu-btn';
-        let ikon = item.jenis.toLowerCase().includes('buku') ? 'fa-book-reader' : 
-                   item.jenis.toLowerCase().includes('quiz') ? 'fa-gamepad' : 'fa-play';
+        const container = document.createElement('div'); container.className = 'sub-menu-container';
+        const btn = document.createElement('div'); btn.className = 'sub-menu-btn';
         
+        let isBook = item.jenis.toLowerCase().includes('buku') || item.url.includes('.pdf');
+        let ikon = isBook ? 'fa-book-reader' : item.jenis.toLowerCase().includes('quiz') ? 'fa-gamepad' : 'fa-play';
         btn.innerHTML = '<i class="fas ' + ikon + '"></i> <div><small>' + item.jenis + '</small><br><b>' + item.judul + '</b></div>';
         
-        btn.onclick = function() {
+        btn.onclick = async function() {
           let url = item.url;
-          if(item.jenis.toLowerCase().includes('buku') || url.includes('.pdf')) {
-            // INTEGRASI KE OM TORO PDF EDITOR
+          if(isBook) {
+            const offlineData = await getOfflinePdf(url);
             const urlPdfEditorSaya = 'https://rbcduabelas.github.io/omtoro-pdf/';
-            bukaIframe(urlPdfEditorSaya + '?buka=' + encodeURIComponent(url));
+            
+            // JIKA FILE ADA DI PENYIMPANAN OFFLINE
+            if(offlineData) {
+              bukaIframe(urlPdfEditorSaya + '?mode=offline');
+              const iframe = document.getElementById('contentFrame');
+              iframe.onload = function() {
+                // Tembakkan file PDF langsung ke dalam Om Toro PDF
+                iframe.contentWindow.postMessage({ type: 'LOAD_OFFLINE_PDF', base64: offlineData, filename: item.judul }, '*');
+              };
+            } else {
+              bukaIframe(urlPdfEditorSaya + '?buka=' + encodeURIComponent(url));
+            }
           } else {
             if(url.includes('drive.google.com')) {
               const match = url.match(/[-\w]{25,}/);
@@ -219,13 +269,45 @@
             bukaIframe(url);
           }
         };
-        list.appendChild(btn);
+        
+        container.appendChild(btn);
+
+        // --- TAMBAH TOMBOL DOWNLOAD UNTUK BUKU ---
+        if (isBook) {
+          const btnDown = document.createElement('div');
+          btnDown.className = 'btn-download-offline';
+          btnDown.innerHTML = '<i class="fas fa-cloud-download-alt"></i><br>Simpan';
+          
+          // Cek otomatis apakah sudah didownload
+          getOfflinePdf(item.url).then(data => {
+            if(data) {
+              btnDown.classList.add('downloaded');
+              btnDown.innerHTML = '<i class="fas fa-check-circle"></i><br>Tersimpan';
+            }
+          });
+
+          btnDown.onclick = async function() {
+            if (!btnDown.classList.contains('downloaded')) {
+               downloadPdfToOffline(item.url, btnDown);
+            } else {
+               if(confirm("Buku ini sudah tersimpan offline. Hapus dari memori perangkat?")) {
+                  await deleteOfflinePdf(item.url);
+                  btnDown.classList.remove('downloaded');
+                  btnDown.innerHTML = '<i class="fas fa-cloud-download-alt"></i><br>Simpan';
+               }
+            }
+          };
+          container.appendChild(btnDown);
+        }
+        list.appendChild(container);
       });
       document.getElementById('kontenModal').style.display = 'flex';
     }
 
     function bukaIframe(url) {
-      document.getElementById('contentFrame').src = url;
+      const iframe = document.getElementById('contentFrame');
+      iframe.onload = null; // Reset agar tidak bocor
+      iframe.src = url;
       document.getElementById('iframeModal').style.display = 'flex';
     }
 
