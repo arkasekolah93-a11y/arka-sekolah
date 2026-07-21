@@ -3,501 +3,362 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, user-scalable=yes">
-  <title>Kuis Arka Belajar</title>
+  <title>Arka Belajar</title>
+  
+  <meta name="theme-color" content="#4ade80">
+  <link rel="manifest" href="manifest.json">
+  
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600&family=Press+Start+2P&display=swap" rel="stylesheet">
   
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body { 
-      font-family: 'Fredoka', sans-serif; 
-      background-color: #fde047; 
-      background-image: radial-gradient(#000 1px, transparent 1px);
-      background-size: 20px 20px;
-      color: #000; 
-      min-height: 100vh; 
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
+        font-family: 'Fredoka', sans-serif; 
+        background-color: #7dd3fc; 
+        background-image: linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)), linear-gradient(45deg, rgba(255,255,255,0.2) 25%, transparent 25%, transparent 75%, rgba(255,255,255,0.2) 75%, rgba(255,255,255,0.2)); 
+        background-size: 60px 60px; 
+        color: #1e293b; 
+        min-height: 100vh; 
+        overflow-x: hidden; 
     }
     
-    .card {
-      background: #fff;
-      border: 5px solid #000;
-      border-radius: 16px;
-      box-shadow: 8px 8px 0 #000;
-      width: 100%;
-      max-width: 600px;
-      padding: 2rem;
-      margin-top: 1rem;
-      position: relative;
-    }
-
-    h1, h2 { font-family: 'Press Start 2P', cursive; text-align: center; line-height: 1.5; }
-    h1 { font-size: 1.2rem; color: #ef4444; text-shadow: 2px 2px 0 #000; margin-bottom: 1.5rem; }
-    h2 { font-size: 1rem; margin-bottom: 1rem; }
-
-    label { font-weight: 600; display: block; margin-top: 1rem; margin-bottom: 0.5rem; font-size: 1.1rem; }
-    select, input[type="number"], input[type="text"] {
-      width: 100%;
-      padding: 12px;
-      border: 3px solid #000;
-      border-radius: 8px;
-      font-family: 'Fredoka', sans-serif;
-      font-size: 1rem;
-      font-weight: 600;
-      background: #e2e8f0;
-      box-shadow: 4px 4px 0 #000;
-      outline: none;
-    }
-
-    .btn {
-      width: 100%;
-      padding: 15px;
-      margin-top: 2rem;
-      border: 4px solid #000;
-      border-radius: 12px;
-      font-family: 'Press Start 2P', cursive;
-      font-size: 0.9rem;
-      cursor: pointer;
-      box-shadow: 6px 6px 0 #000;
-      transition: transform 0.1s, box-shadow 0.1s;
-    }
-    .btn:active { transform: translate(6px, 6px); box-shadow: 0 0 0 #000; }
-    .btn-primary { background: #4ade80; color: #000; }
-    .btn-danger { background: #ef4444; color: #fff; margin-top: 1rem;}
-    .btn-option {
-      background: #93c5fd; font-family: 'Fredoka', sans-serif; font-size: 1.2rem; font-weight: 600;
-      margin-top: 10px; text-align: left;
-    }
-
-    .info-banner {
-      background: #3b82f6; color: white; padding: 10px; border: 3px solid #000; 
-      border-radius: 8px; font-weight: bold; text-align: center; margin-bottom: 1.5rem;
-      box-shadow: 4px 4px 0 #000;
-    }
+    .header { background: #4ade80; padding: 1rem; display: flex; justify-content: center; align-items: center; border-bottom: 8px solid #713f12; border-top: 4px solid #bbf7d0; position: sticky; top: 0; z-index: 10; }
+    .header h1 { font-family: 'Press Start 2P', cursive; font-size: 1.2rem; color: white; cursor: pointer; text-shadow: 2px 2px 0 #000, -1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000; letter-spacing: 1px; text-align: center; }
     
-    .hidden { display: none !important; }
-    .arabic-text { direction: rtl; font-size: 1.8rem; line-height: 2.5; }
+    .container { padding: 1.5rem; width: 100%; max-width: 1200px; margin: 0 auto; min-height: 80vh; }
+    .nav-top { display: none; margin-bottom: 1.5rem; align-items: center; gap: 1rem; flex-wrap: wrap; }
     
-    .hud { display: flex; justify-content: space-between; font-family: 'Press Start 2P', cursive; font-size: 0.7rem; margin-bottom: 1rem; background: #000; color: #fff; padding: 10px; border-radius: 8px; }
-    .timer.danger { color: #ef4444; animation: blink 1s infinite; }
-    @keyframes blink { 50% { opacity: 0; } }
+    .btn-back { background: #fde047; border: 3px solid #000; padding: 0.6rem 1rem; border-radius: 8px; cursor: pointer; font-family: 'Press Start 2P', cursive; font-size: 0.6rem; box-shadow: 3px 3px 0 #000; transition: all 0.1s; }
+    .btn-back:active { transform: translate(3px, 3px); box-shadow: 0 0 0 #000; }
+    
+    .page-title { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; color: #fff; text-shadow: 2px 2px 0 #000; line-height: 1.4; }
+    
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.5rem; }
+    .card { background: #fff; border-radius: 15px; padding: 1.5rem 1rem; text-align: center; cursor: pointer; border: 4px solid #000; box-shadow: 5px 5px 0 rgba(0,0,0,0.8); transition: all 0.1s; }
+    .card:active { transform: translate(5px, 5px); box-shadow: 0 0 0 rgba(0,0,0,0.8); }
+    .card i { font-size: 3rem; color: #fff; margin-bottom: 1rem; text-shadow: 3px 3px 0 #000; }
+    .card h2 { font-family: 'Press Start 2P', cursive; font-size: 0.8rem; line-height: 1.5; color: #000; }
+    
+    .card:nth-child(4n+1) { background: #fca5a5; } 
+    .card:nth-child(4n+2) { background: #fde047; } 
+    .card:nth-child(4n+3) { background: #86efac; } 
+    .card:nth-child(4n+4) { background: #93c5fd; } 
+    
+    .modal { display: none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; padding: 1rem; }
+    .modal-content { background: #e2e8f0; padding: 2.5rem 1rem 1rem 1rem; border: 5px solid #000; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto; position: relative; box-shadow: 8px 8px 0 #000; }
+    .close-btn { position: absolute; top: 10px; right: 10px; background: #ef4444; color: white; border: 3px solid #000; width: 35px; height: 35px; font-size: 1.2rem; font-weight: bold; display: flex; justify-content: center; align-items: center; cursor: pointer; box-shadow: 3px 3px 0 #000; z-index: 10; }
+    
+    /* Layout Tombol Menu & Tombol Download */
+    .sub-menu-container { display: flex; gap: 10px; margin-bottom: 1rem; align-items: stretch; }
+    .sub-menu-btn { flex: 1; display: flex; align-items: center; padding: 1rem; background: #3b82f6; border: 4px solid #000; border-radius: 12px; cursor: pointer; color: white; font-weight: 600; box-shadow: 4px 4px 0 #000; transition: all 0.1s; text-align: left; }
+    .sub-menu-btn:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #000; background: #2563eb; }
+    .sub-menu-btn i { font-size: 1.5rem; margin-right: 1rem; color: #fde047; text-shadow: 2px 2px 0 #000; }
+    
+    .btn-download-offline { width: 75px; display: flex; flex-direction: column; justify-content: center; align-items: center; background: #fde047; border: 4px solid #000; border-radius: 12px; cursor: pointer; font-weight: 600; color: #000; font-size: 0.65rem; box-shadow: 4px 4px 0 #000; transition: all 0.1s; text-align: center; padding: 5px; }
+    .btn-download-offline:active { transform: translate(4px, 4px); box-shadow: 0 0 0 #000; }
+    .btn-download-offline i { font-size: 1.4rem; margin-bottom: 4px; }
+    .btn-download-offline.downloaded { background: #86efac; color: #064e3b; }
 
-    #loadingScreen i { font-size: 3rem; color: #3b82f6; margin-bottom: 1rem; }
+    #iframeModal .modal-content { width: 100vw; height: 100vh; max-width: 100vw; max-height: 100vh; padding: 0; border: none; background: #000; }
+    iframe { width: 100%; height: 100%; border: none; }
+    .loading-box { text-align: center; width: 100%; padding: 3rem; background: #fff; border: 4px solid #000; box-shadow: 6px 6px 0 #000; }
+    .mod-title { margin-top: 10px; margin-bottom: 1.5rem; color: #000; font-family: 'Press Start 2P', cursive; text-align: center; font-size: 0.9rem; }
     
-    .media-box {
-        margin-bottom: 1.5rem;
-        text-align: center;
-    }
-    .media-box img, .media-box iframe {
-        max-width: 100%;
-        max-height: 250px;
-        border-radius: 8px;
-        border: 4px solid #000;
-        box-shadow: 4px 4px 0 #000;
+    @media (min-width: 768px) { 
+        .header h1 { font-size: 1.5rem; } 
+        .grid { grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); } 
     }
   </style>
 </head>
 <body>
 
-  <!-- Layar Loading Data -->
-  <div id="loadingScreen" class="card" style="text-align: center; padding: 4rem 2rem;">
-    <i class="fas fa-gamepad fa-bounce" style="font-size: 3rem; color: #3b82f6; margin-bottom: 1rem;"></i>
-    <h2>MENYIAPKAN ARENA BERMAIN...</h2>
-    <p>Memuat teka-teki seru...</p>
+  <div class="header">
+    <h1 onclick="tampilKelas()">ARKA BELAJAR</h1>
   </div>
 
-  <!-- Layar Pengaturan Kuis -->
-  <div id="setupScreen" class="card hidden">
-    <h1>ARENA KUIS</h1>
-    
-    <div id="bannerInfo" class="info-banner hidden"></div>
-
-    <label>Mode Bermain:</label>
-    <select id="setMode" onchange="toggleWaktuSetup()">
-      <option value="latihan">🎓 Latihan (Tanpa Waktu)</option>
-      <option value="kuis">⏱️ Kuis Cepat (Ada Waktu)</option>
-    </select>
-
-    <div id="waktuSetupBox" class="hidden">
-      <label>Waktu Per Soal:</label>
-      <select id="setWaktu" onchange="toggleCustomWaktu()">
-        <option value="5">5 Detik</option>
-        <option value="10">10 Detik</option>
-        <option value="15">15 Detik</option>
-        <option value="bebas">Bebas (Ketik Sendiri)</option>
-      </select>
-      <input type="number" id="customWaktu" class="hidden" placeholder="Masukkan detik..." style="margin-top:10px;" min="1">
+  <div class="container">
+    <div id="navBab" class="nav-top">
+      <button id="btnKembali" class="btn-back"><i class="fas fa-caret-left"></i> KEMBALI</button>
+      <h2 id="breadcrumb" class="page-title">Pilih Kelas</h2>
     </div>
 
-    <label>Jenis Soal:</label>
-    <select id="setTipe">
-      <option value="semua">Campuran (Ganda & Uraian)</option>
-      <option value="ganda">Pilihan Ganda Saja</option>
-      <option value="uraian">Uraian / Isian Saja</option>
-    </select>
-
-    <label>Jumlah Soal:</label>
-    <select id="setJumlah" onchange="toggleCustomJumlah()">
-      <option value="5">5 Soal</option>
-      <option value="10">10 Soal</option>
-      <option value="15">15 Soal</option>
-      <option value="bebas">Bebas (Ketik Sendiri)</option>
-    </select>
-    <input type="number" id="customJumlah" class="hidden" placeholder="Masukkan angka..." style="margin-top:10px;" min="1">
-
-    <button class="btn btn-primary" onclick="mulaiKuis()">MULAI MISI <i class="fas fa-rocket"></i></button>
+    <div id="mainGrid" class="grid"></div>
   </div>
 
-  <!-- Layar Utama Bermain -->
-  <div id="playScreen" class="card hidden">
-    <div class="hud">
-      <div>SOAL: <span id="soalKe">1</span>/<span id="soalTotal">10</span></div>
-      <div id="waktuBox" class="hidden">WAKTU: <span id="waktuSisa">0</span>s</div>
+  <div id="kontenModal" class="modal">
+    <div class="modal-content">
+      <div class="close-btn" onclick="tutupModal('kontenModal')">X</div>
+      <h2 id="judulBabSaatIni" class="mod-title">Pilih Materi</h2>
+      <div id="kontenList"></div>
     </div>
-    
-    <div id="tempatMedia" class="media-box hidden"></div>
-    
-    <h2 id="teksSoal" style="text-align: left; font-family: 'Fredoka'; font-size: 1.5rem; margin-bottom: 1.5rem;">Pertanyaan...</h2>
-    
-    <div id="tempatOpsi"></div>
-    
-    <div id="tempatUraian" class="hidden">
-      <input type="text" id="inputUraian" placeholder="Ketik jawabanmu di sini...">
-      <button class="btn btn-primary" onclick="cekUraian()" style="margin-top: 10px;">JAWAB <i class="fas fa-check"></i></button>
-    </div>
-
-    <div id="feedback" class="info-banner hidden" style="margin-top: 1rem;"></div>
-    <button id="btnLanjut" class="btn btn-primary hidden" onclick="soalSelanjutnya()">LANJUT <i class="fas fa-arrow-right"></i></button>
   </div>
 
-  <!-- Layar Hasil -->
-  <div id="resultScreen" class="card hidden" style="text-align: center;">
-    <h1>MISI SELESAI!</h1>
-    <h2 style="font-size: 3rem; margin: 1.5rem 0;" id="skorAkhir">100</h2>
-    <p style="font-weight: bold; font-size: 1.2rem; margin-bottom: 2rem;">Benar: <span id="benarAkhir">0</span> | Salah: <span id="salahAkhir">0</span></p>
-    <button class="btn btn-primary" onclick="location.reload()">MAIN LAGI <i class="fas fa-redo"></i></button>
+  <div id="iframeModal" class="modal">
+    <div class="modal-content">
+      <div class="close-btn" onclick="tutupModal('iframeModal')">X</div>
+      <iframe id="contentFrame" src="" allowfullscreen></iframe>
+    </div>
   </div>
 
   <script>
-    // MASUKKAN LINK GOOGLE APPS SCRIPT KUIS BAPAK DI SINI:
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbxOeIJAjNpZ4Qf0uYom7l0fvSNh25D4jHLMjG3-9-DZjmcBLcf_Ie1Ps__XkithIHP4/exec"; 
+    // Link ke Google Apps Script Database Utama Arka Belajar
+    const GOOGLE_APP_URL = "https://script.google.com/macros/s/AKfycbw-x7qjibHqAuD_U-hfUyBbKRdTbzPhYdISgjlDDmGvGEqUd26W0oiqsPYJWmlhUg/exec";
+    const API_URL = GOOGLE_APP_URL + "?p=api";
 
-    let BANK_SOAL_GLOBAL = [];
-    let soalTersaring = [];
-    let indexSoal = 0;
-    let skorBenar = 0;
-    let skorSalah = 0;
-    let waktuTimer;
-    let sisaWaktu = 0;
-    let waktuPerSoal = 0;
+    let allData = [];
+    let filterKelas = '';
+    let filterMapel = '';
 
-    let targetKelas = "";
-    let targetMapel = "";
-    let targetBab = "";
-
-    window.onload = async function() {
-      const urlParams = new URLSearchParams(window.location.search);
-      targetKelas = urlParams.get('kelas') || "";
-      targetMapel = urlParams.get('mapel') || "";
-      targetBab = urlParams.get('bab') || "";
-
-      await tarikDataDariSheets();
+    window.onload = function() {
+      fetch(API_URL)
+        .then(response => response.json())
+        .then(response => {
+          if (response.status === "error") {
+            tampilkanError('DATA ERROR!', response.message);
+            return;
+          }
+          allData = response.data || [];
+          if(allData.length === 0) {
+            tampilkanError('KOSONG!', 'Silakan isi data di Google Sheets.');
+          } else {
+            tampilKelas(); 
+          }
+        })
+        .catch(err => {
+          tampilkanError('KONEKSI GAGAL!', 'Periksa koneksi internet atau link Google Script.');
+          console.error(err);
+        });
     };
 
-    async function tarikDataDariSheets() {
+    function tampilkanError(judul, deskripsi) {
+      document.getElementById('mainGrid').innerHTML = '<div class="loading-box"><h3 style="color:#ef4444; font-family:\'Press Start 2P\'">' + judul + '</h3><p>' + deskripsi + '</p></div>';
+    }
+
+    // --- MESIN PENYIMPANAN OFFLINE (INDEXED DB) ---
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open("ArkaPdfDB", 1);
+        request.onupgradeneeded = (e) => { e.target.result.createObjectStore("pdfs"); };
+        request.onsuccess = (e) => resolve(e.target.result);
+        request.onerror = (e) => reject(e.target.error);
+      });
+    }
+
+    async function getOfflinePdf(url) {
       try {
-        const response = await fetch(GAS_URL);
-        const json = await response.json();
-        
-        if(json.status === "success") {
-          BANK_SOAL_GLOBAL = json.data;
-          siapkanMenu();
-        } else {
-          alert("Gagal membaca Sheets: " + json.message);
-        }
-      } catch (e) {
-        alert("Gagal koneksi ke Google Sheets. Periksa link GAS.");
-      }
-    }
-
-    function siapkanMenu() {
-      document.getElementById('loadingScreen').classList.add('hidden');
-      document.getElementById('setupScreen').classList.remove('hidden');
-
-      if(targetMapel && targetBab) {
-        const banner = document.getElementById('bannerInfo');
-        let infoTeks = `<i class="fas fa-book"></i> Materi Terpilih:<br>`;
-        if(targetKelas) infoTeks += `Kelas ${targetKelas} - `;
-        infoTeks += `${targetMapel.toUpperCase()} - ${targetBab.toUpperCase()}`;
-        
-        banner.innerHTML = infoTeks;
-        banner.classList.remove('hidden');
-      }
-    }
-
-    function toggleCustomJumlah() {
-      const val = document.getElementById('setJumlah').value;
-      if(val === 'bebas') {
-        document.getElementById('customJumlah').classList.remove('hidden');
-      } else {
-        document.getElementById('customJumlah').classList.add('hidden');
-      }
-    }
-
-    function toggleWaktuSetup() {
-      const val = document.getElementById('setMode').value;
-      if(val === 'kuis') {
-        document.getElementById('waktuSetupBox').classList.remove('hidden');
-      } else {
-        document.getElementById('waktuSetupBox').classList.add('hidden');
-      }
-    }
-
-    function toggleCustomWaktu() {
-      const val = document.getElementById('setWaktu').value;
-      if(val === 'bebas') {
-        document.getElementById('customWaktu').classList.remove('hidden');
-      } else {
-        document.getElementById('customWaktu').classList.add('hidden');
-      }
-    }
-
-    // FUNGSI PEMBERSIH TEKS SUPER (MENGHAPUS SPASI & SIMBOL UNTUK PENCOCOKAN)
-    function bersihkanTeks(teks) {
-      if(!teks) return "";
-      // Ubah ke huruf kecil dan hapus semua spasi serta karakter non-alfanumerik
-      return teks.toString().toLowerCase().replace(/[^a-z0-9]/g, '');
-    }
-
-    function mulaiKuis() {
-      const mode = document.getElementById('setMode').value;
-      const tipe = document.getElementById('setTipe').value;
-      let jumlahMinta = document.getElementById('setJumlah').value;
-      
-      if(jumlahMinta === 'bebas') {
-        jumlahMinta = parseInt(document.getElementById('customJumlah').value) || 5;
-      } else {
-        jumlahMinta = parseInt(jumlahMinta);
-      }
-
-      // Ambil nilai waktu jika mode kuis
-      if(mode === 'kuis') {
-        let w = document.getElementById('setWaktu').value;
-        if(w === 'bebas') {
-          waktuPerSoal = parseInt(document.getElementById('customWaktu').value) || 10;
-        } else {
-          waktuPerSoal = parseInt(w);
-        }
-      }
-
-      // 1. SARING SOAL (ANTI TYPO & SUPER PINTAR)
-      soalTersaring = BANK_SOAL_GLOBAL.filter(s => {
-        let k1 = bersihkanTeks(s.kelas);
-        let k2 = bersihkanTeks(targetKelas);
-        let cocokKelas = targetKelas ? (k1 === k2 || k1.includes(k2)) : true;
-        
-        let m1 = bersihkanTeks(s.mapel);
-        let m2 = bersihkanTeks(targetMapel);
-        let cocokMapel = targetMapel ? (m1 === m2) : true;
-        
-        // --- Pencocokan Bab Ekstrak Angka ---
-        // Mencari angka di dalam teks (Misal: "Bab 1-2" jadi ['1', '2'])
-        let angkaBabSoal = s.bab.toString().match(/\d+/g) || [];
-        let angkaBabTarget = targetBab.toString().match(/\d+/g) || [];
-        
-        let cocokBab = true;
-        if (targetBab) {
-            if (angkaBabSoal.length > 0 && angkaBabTarget.length > 0) {
-                // Jika dari aplikasi minta "Bab 1-2", dan di excel ada "1", maka cocok!
-                cocokBab = angkaBabSoal.some(angka => angkaBabTarget.includes(angka));
-            } else {
-                // Jika bab tidak pakai angka sama sekali (Misal: "Ujian Akhir")
-                let b1 = bersihkanTeks(s.bab).replace(/bab/g, '');
-                let b2 = bersihkanTeks(targetBab).replace(/bab/g, '');
-                cocokBab = (b1 === b2 || b2.includes(b1) || b1.includes(b2));
-            }
-        }
-        
-        let cocokTipe = (tipe === 'semua') ? true : (s.tipe === tipe);
-        
-        return cocokKelas && cocokMapel && cocokBab && cocokTipe;
-      });
-
-      if(soalTersaring.length === 0) {
-        let infoDebug = BANK_SOAL_GLOBAL.length > 0 
-          ? `\n\nBOCORAN DATA DI GOOGLE SHEETS BAPAK:\nNama Tab (Mapel): ${BANK_SOAL_GLOBAL[0].mapel}\nNama Bab: ${BANK_SOAL_GLOBAL[0].bab}`
-          : "\n\nDatabase di Google Sheets Bapak kosong atau gagal terbaca.";
-        
-        alert("Waduh! Soal untuk materi ini belum ada." + infoDebug);
-        return;
-      }
-
-      soalTersaring.sort(() => Math.random() - 0.5);
-
-      if(jumlahMinta > soalTersaring.length) {
-        alert(`Jumlah soal yang diminta (${jumlahMinta}) terlalu banyak. Bank Soal hanya punya ${soalTersaring.length} soal. Kita pakai semuanya ya!`);
-        jumlahMinta = soalTersaring.length;
-      }
-      soalTersaring = soalTersaring.slice(0, jumlahMinta);
-
-      // 2. PERBAIKAN BUG KUNCI JAWABAN (A/B/C/D)
-      soalTersaring.forEach(s => {
-        if (s.tipe === 'ganda') {
-          let k = s.jawaban.toString().toUpperCase().trim();
-          // Jika Bapak mengisi kunci dengan A, B, C, atau D, kita ubah jadi teks aslinya
-          if (k === 'A' && s.opsi[0]) s.jawabanBenarTeks = s.opsi[0];
-          else if (k === 'B' && s.opsi[1]) s.jawabanBenarTeks = s.opsi[1];
-          else if (k === 'C' && s.opsi[2]) s.jawabanBenarTeks = s.opsi[2];
-          else if (k === 'D' && s.opsi[3]) s.jawabanBenarTeks = s.opsi[3];
-          else s.jawabanBenarTeks = s.jawaban; // Kalau sudah teks (misal: "Tiga"), biarkan saja
-        } else {
-          s.jawabanBenarTeks = s.jawaban;
-        }
-      });
-
-      document.getElementById('setupScreen').classList.add('hidden');
-      document.getElementById('playScreen').classList.remove('hidden');
-      document.getElementById('soalTotal').innerText = soalTersaring.length;
-      
-      if(mode === 'kuis') { document.getElementById('waktuBox').classList.remove('hidden'); }
-
-      tampilkanSoal();
-    }
-
-    function tampilkanSoal() {
-      clearInterval(waktuTimer);
-      const soalKini = soalTersaring[indexSoal];
-      const mode = document.getElementById('setMode').value;
-      
-      document.getElementById('soalKe').innerText = indexSoal + 1;
-      
-      const tempatMedia = document.getElementById('tempatMedia');
-      tempatMedia.innerHTML = "";
-      tempatMedia.classList.add('hidden');
-      if (soalKini.media) {
-          tempatMedia.classList.remove('hidden');
-          if(soalKini.media.includes('youtube.com') || soalKini.media.includes('youtu.be')) {
-              let ytId = soalKini.media.split('v=')[1] || soalKini.media.split('youtu.be/')[1];
-              if(ytId) ytId = ytId.split('&')[0];
-              tempatMedia.innerHTML = `<iframe width="100%" height="200" src="https://www.youtube.com/embed/${ytId}" frameborder="0" allowfullscreen></iframe>`;
-          } else {
-              tempatMedia.innerHTML = `<img src="${soalKini.media}" alt="Media">`;
-          }
-      }
-
-      let teksElement = document.getElementById('teksSoal');
-      teksElement.innerText = soalKini.soal;
-      if(/[\u0600-\u06FF]/.test(soalKini.soal)) { teksElement.classList.add('arabic-text'); } 
-      else { teksElement.classList.remove('arabic-text'); }
-
-      document.getElementById('feedback').classList.add('hidden');
-      document.getElementById('btnLanjut').classList.add('hidden');
-      
-      const tempatOpsi = document.getElementById('tempatOpsi');
-      const tempatUraian = document.getElementById('tempatUraian');
-      tempatOpsi.innerHTML = "";
-      document.getElementById('inputUraian').value = "";
-
-      if(soalKini.tipe === 'ganda') {
-        tempatUraian.classList.add('hidden');
-        tempatOpsi.classList.remove('hidden');
-        
-        let opsiAcak = [...soalKini.opsi].sort(() => Math.random() - 0.5);
-        opsiAcak.forEach(opsi => {
-          let btn = document.createElement('button');
-          btn.className = 'btn btn-option';
-          btn.innerText = opsi;
-          if(/[\u0600-\u06FF]/.test(opsi)) { btn.classList.add('arabic-text'); }
-          btn.onclick = () => cekJawaban(btn, opsi, soalKini.jawabanBenarTeks);
-          tempatOpsi.appendChild(btn);
+        const db = await openDB();
+        return new Promise((resolve) => {
+          const tx = db.transaction("pdfs", 'readonly');
+          const request = tx.objectStore("pdfs").get(url);
+          request.onsuccess = () => resolve(request.result); 
+          request.onerror = () => resolve(null);
         });
-      } else {
-        tempatOpsi.classList.add('hidden');
-        tempatUraian.classList.remove('hidden');
-      }
-
-      if(mode === 'kuis') { jalankanWaktu(waktuPerSoal); }
+      } catch(e) { return null; }
     }
 
-    function jalankanWaktu(detik) {
-      sisaWaktu = detik;
-      const display = document.getElementById('waktuSisa');
-      const box = document.getElementById('waktuBox');
-      display.innerText = sisaWaktu;
-      box.classList.remove('danger');
-      
-      waktuTimer = setInterval(() => {
-        sisaWaktu--;
-        display.innerText = sisaWaktu;
-        if(sisaWaktu <= 5) { box.classList.add('danger'); }
-        if(sisaWaktu <= 0) {
-          clearInterval(waktuTimer);
-          prosesSalahWaktuHabis();
+    async function saveOfflinePdf(url, base64Data) {
+      const db = await openDB();
+      return new Promise((resolve, reject) => {
+        const tx = db.transaction("pdfs", 'readwrite');
+        tx.objectStore("pdfs").put(base64Data, url);
+        tx.oncomplete = () => resolve();
+        tx.onerror = () => reject();
+      });
+    }
+
+    async function deleteOfflinePdf(url) {
+      const db = await openDB();
+      return new Promise((resolve) => {
+        const tx = db.transaction("pdfs", 'readwrite');
+        tx.objectStore("pdfs").delete(url);
+        tx.oncomplete = () => resolve();
+      });
+    }
+
+    async function downloadPdfToOffline(url, btnElement) {
+      btnElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i><br>Proses...';
+      try {
+        let base64Data = "";
+        if(url.includes('drive.google.com')) {
+          // Manfaatkan proxy di code.gs untuk tembus limitasi Google Drive
+          const match = url.match(/[-\w]{25,}/);
+          if(!match) throw new Error("Link Drive tidak valid");
+          const proxyUrl = GOOGLE_APP_URL + "?p=getpdf&id=" + match[0];
+          const response = await fetch(proxyUrl);
+          base64Data = await response.text();
+          if(base64Data.startsWith('Error')) throw new Error(base64Data);
+        } else {
+          const response = await fetch(url);
+          const blob = await response.blob();
+          base64Data = await new Promise((resolve, reject) => {
+             const reader = new FileReader();
+             reader.onloadend = () => resolve(reader.result.split(',')[1]);
+             reader.onerror = reject;
+             reader.readAsDataURL(blob);
+          });
         }
-      }, 1000);
+        await saveOfflinePdf(url, base64Data);
+        btnElement.classList.add('downloaded');
+        btnElement.innerHTML = '<i class="fas fa-check-circle"></i><br>Tersimpan';
+      } catch(e) {
+        alert('Gagal mendownload: ' + e.message);
+        btnElement.innerHTML = '<i class="fas fa-cloud-download-alt"></i><br>Simpan';
+      }
     }
+    // --- AKHIR MESIN OFFLINE ---
 
-    function cekJawaban(btnKlik, opsiDipilih, kunci) {
-      clearInterval(waktuTimer);
-      let semuaBtn = document.querySelectorAll('.btn-option');
-      semuaBtn.forEach(b => b.disabled = true);
-
-      let benar = opsiDipilih.toString().toLowerCase().trim() === kunci.toString().toLowerCase().trim();
-      tampilkanFeedback(benar, kunci);
-      if(benar) { btnKlik.style.background = "#4ade80"; skorBenar++; } 
-      else { btnKlik.style.background = "#ef4444"; btnKlik.style.color = "#fff"; skorSalah++; }
-    }
-
-    function cekUraian() {
-      clearInterval(waktuTimer);
-      let isi = document.getElementById('inputUraian').value;
-      if(!isi) return;
-      document.getElementById('inputUraian').disabled = true;
-      let kunci = soalTersaring[indexSoal].jawabanBenarTeks;
+    <!-- STREAMING_CHUNK:Logika navigasi hirarki (Kelas > Mapel > Bab > Konten)... -->
+    function tampilKelas() {
+      filterKelas = ''; document.getElementById('navBab').style.display = 'none';
+      const grid = document.getElementById('mainGrid'); grid.innerHTML = '';
       
-      let benar = isi.toString().toLowerCase().trim() === kunci.toString().toLowerCase().trim();
-      tampilkanFeedback(benar, kunci);
-      if(benar) { skorBenar++; } else { skorSalah++; }
+      const daftarKelas = [];
+      allData.forEach(item => { let k = item.kelas || "1"; if(daftarKelas.indexOf(k.toString()) === -1) daftarKelas.push(k.toString()); });
+      daftarKelas.sort();
+
+      daftarKelas.forEach(kelas => {
+        const div = document.createElement('div'); div.className = 'card';
+        div.innerHTML = '<i class="fas fa-graduation-cap"></i><h2>KELAS ' + kelas + '</h2>';
+        div.onclick = function() { tampilMapel(kelas); }; grid.appendChild(div);
+      });
     }
 
-    function prosesSalahWaktuHabis() {
-      let semuaBtn = document.querySelectorAll('.btn-option');
-      semuaBtn.forEach(b => b.disabled = true);
-      document.getElementById('inputUraian').disabled = true;
-      skorSalah++;
-      tampilkanFeedback(false, soalTersaring[indexSoal].jawabanBenarTeks, true);
+    function tampilMapel(kelas) {
+      filterKelas = kelas; document.getElementById('navBab').style.display = 'flex';
+      document.getElementById('breadcrumb').innerText = "KELAS " + kelas;
+      document.getElementById('btnKembali').onclick = tampilKelas;
+      const grid = document.getElementById('mainGrid'); grid.innerHTML = '';
+      
+      const mapels = [];
+      allData.forEach(item => { if(item.kelas.toString() === kelas && mapels.indexOf(item.mapel) === -1) mapels.push(item.mapel); });
+      
+      const iconList = ['fa-gamepad', 'fa-book-open', 'fa-star', 'fa-rocket', 'fa-trophy', 'fa-cube'];
+      mapels.forEach((mapel, index) => {
+        const div = document.createElement('div'); div.className = 'card';
+        div.innerHTML = '<i class="fas ' + iconList[index % iconList.length] + '"></i><h2>' + mapel + '</h2>';
+        div.onclick = function() { tampilBab(mapel); }; grid.appendChild(div);
+      });
     }
 
-    function tampilkanFeedback(benar, kunci, waktuHabis = false) {
-      let fb = document.getElementById('feedback');
-      fb.classList.remove('hidden');
-      if(benar) {
-        fb.style.background = "#4ade80"; fb.style.color = "#000";
-        fb.innerHTML = "✅ TEPAT SEKALI!";
-      } else {
-        fb.style.background = "#ef4444"; fb.style.color = "#fff";
-        fb.innerHTML = (waktuHabis ? "⏱️ WAKTU HABIS!<br>" : "❌ KURANG TEPAT!<br>") + "Jawaban: " + kunci;
-      }
-      document.getElementById('btnLanjut').classList.remove('hidden');
+    function tampilBab(mapel) {
+      filterMapel = mapel; document.getElementById('breadcrumb').innerText = "KELAS " + filterKelas + " > " + mapel.toUpperCase();
+      document.getElementById('btnKembali').onclick = function() { tampilMapel(filterKelas); };
+      const grid = document.getElementById('mainGrid'); grid.innerHTML = '';
+      
+      const babs = [];
+      allData.forEach(item => { if(item.kelas.toString() === filterKelas && item.mapel === mapel && babs.indexOf(item.bab) === -1) babs.push(item.bab); });
+      
+      babs.forEach(bab => {
+        const div = document.createElement('div'); div.className = 'card';
+        div.innerHTML = '<i class="fas fa-door-open"></i><h2>' + bab + '</h2>';
+        div.onclick = function() { tampilKonten(bab); }; grid.appendChild(div);
+      });
     }
 
-    function soalSelanjutnya() {
-      indexSoal++;
-      if(indexSoal < soalTersaring.length) {
-        document.getElementById('inputUraian').disabled = false;
-        tampilkanSoal();
-      } else {
-        document.getElementById('playScreen').classList.add('hidden');
-        document.getElementById('resultScreen').classList.remove('hidden');
+    function tampilKonten(bab) {
+      document.getElementById('judulBabSaatIni').innerText = bab.toUpperCase();
+      const list = document.getElementById('kontenList'); list.innerHTML = '';
+      
+      const konten = allData.filter(item => item.kelas.toString() === filterKelas && item.mapel === filterMapel && item.bab === bab );
+      
+      konten.forEach(item => {
+        const container = document.createElement('div'); container.className = 'sub-menu-container';
+        const btn = document.createElement('div'); btn.className = 'sub-menu-btn';
         
-        let nilaiAkhir = Math.round((skorBenar / soalTersaring.length) * 100);
-        document.getElementById('skorAkhir').innerText = nilaiAkhir;
-        document.getElementById('benarAkhir').innerText = skorBenar;
-        document.getElementById('salahAkhir').innerText = skorSalah;
-      }
+        let isBook = item.jenis.toLowerCase().includes('buku') || item.url.includes('.pdf');
+        let ikon = isBook ? 'fa-book-reader' : item.jenis.toLowerCase().includes('kuis') || item.jenis.toLowerCase().includes('latihan') ? 'fa-gamepad' : 'fa-play';
+        btn.innerHTML = '<i class="fas ' + ikon + '"></i> <div><small>' + item.jenis + '</small><br><b>' + item.judul + '</b></div>';
+        
+        btn.onclick = async function() {
+          let url = item.url;
+          if(isBook) {
+            const offlineData = await getOfflinePdf(url);
+            const urlPdfEditorSaya = 'https://rbcduabelas.github.io/omtoro-pdf/';
+            
+            // JIKA FILE ADA DI PENYIMPANAN OFFLINE
+            if(offlineData) {
+              bukaIframe(urlPdfEditorSaya + '?mode=offline');
+              const iframe = document.getElementById('contentFrame');
+              iframe.onload = function() {
+                // Tembakkan file PDF langsung ke dalam Om Toro PDF
+                iframe.contentWindow.postMessage({ type: 'LOAD_OFFLINE_PDF', base64: offlineData, filename: item.judul }, '*');
+              };
+            } else {
+              bukaIframe(urlPdfEditorSaya + '?buka=' + encodeURIComponent(url));
+            }
+          } else {
+            if(url.includes('drive.google.com')) {
+              const match = url.match(/[-\w]{25,}/);
+              if(match) url = 'https://drive.google.com/file/d/' + match[0] + '/preview';
+            }
+
+            // --- KODE BARU KITA: TITIPKAN MAPEL & BAB KE LINK KUIS ---
+            // Mengecek apakah tombol yang ditekan adalah Latihan Soal / Kuis
+            if(item.jenis.toLowerCase().includes('latihan') || item.jenis.toLowerCase().includes('kuis')) {
+              // Menyisipkan parameter ke ujung URL
+              const separator = url.includes('?') ? '&' : '?';
+              url = url + separator + 'kelas=' + encodeURIComponent(filterKelas) + '&mapel=' + encodeURIComponent(filterMapel) + '&bab=' + encodeURIComponent(bab);
+            }
+            
+            bukaIframe(url);
+          }
+        };
+        
+        container.appendChild(btn);
+
+        // --- TAMBAH TOMBOL DOWNLOAD UNTUK BUKU ---
+        if (isBook) {
+          const btnDown = document.createElement('div');
+          btnDown.className = 'btn-download-offline';
+          btnDown.innerHTML = '<i class="fas fa-cloud-download-alt"></i><br>Simpan';
+          
+          // Cek otomatis apakah sudah didownload
+          getOfflinePdf(item.url).then(data => {
+            if(data) {
+              btnDown.classList.add('downloaded');
+              btnDown.innerHTML = '<i class="fas fa-check-circle"></i><br>Tersimpan';
+            }
+          });
+
+          btnDown.onclick = async function() {
+            if (!btnDown.classList.contains('downloaded')) {
+               downloadPdfToOffline(item.url, btnDown);
+            } else {
+               if(confirm("Buku ini sudah tersimpan offline. Hapus dari memori perangkat?")) {
+                  await deleteOfflinePdf(item.url);
+                  btnDown.classList.remove('downloaded');
+                  btnDown.innerHTML = '<i class="fas fa-cloud-download-alt"></i><br>Simpan';
+               }
+            }
+          };
+          container.appendChild(btnDown);
+        }
+        list.appendChild(container);
+      });
+      document.getElementById('kontenModal').style.display = 'flex';
+    }
+
+    function bukaIframe(url) {
+      const iframe = document.getElementById('contentFrame');
+      iframe.onload = null; // Reset agar tidak bocor
+      iframe.src = url;
+      document.getElementById('iframeModal').style.display = 'flex';
+    }
+
+    function tutupModal(id) {
+      document.getElementById(id).style.display = 'none';
+      if(id === 'iframeModal') { document.getElementById('contentFrame').src = ''; }
+    }
+
+    // --- PERBAIKAN SERVICE WORKER ---
+    // Pastikan Service Worker hanya berjalan di server sungguhan (http/https)
+    if ('serviceWorker' in navigator && (window.location.protocol === 'http:' || window.location.protocol === 'https:')) {
+      navigator.serviceWorker.register('./sw.js')
+        .then(() => console.log('PWA Siap!'))
+        .catch(err => console.warn('Pendaftaran Service Worker dilewati:', err.message));
+    } else {
+      console.log('Mode PWA / Service Worker dinonaktifkan pada lingkungan ini.');
     }
   </script>
 </body>
